@@ -30,10 +30,8 @@ spec:
     threshold: 3
     # A/B test interactions
     iterations: 10
+    # A/B test routing
     match:
-      - headers:
-          x-canary:
-            exact: "insider"
       - headers:
           user-agent:
             prefix: "Firefox"
@@ -64,4 +62,4 @@ spec:
         type: rollout
         url: http://flagger-loadtester.frontend/
         metadata:
-          cmd: "hey -z 2m -q 10 -c 2 -H 'X-Canary: insider' -host 127.0.0.1.xip.io http://envoy.projectcontour"
+          cmd: "hey -z 2m -q 10 -c 2 http://podinfo-canary.frontend:9898/token"
