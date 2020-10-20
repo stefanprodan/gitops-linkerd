@@ -34,6 +34,9 @@ spec:
       - headers:
           x-canary:
             exact: "insider"
+      - headers:
+          user-agent:
+            prefix: "Firefox"
     # Linkerd Prometheus checks
     metrics:
       - name: request-success-rate
