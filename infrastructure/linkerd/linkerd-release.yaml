@@ -1,0 +1,32 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: linkerd
+  namespace: linkerd
+spec:
+  interval: 10m0s
+  releaseName: linkerd
+  chart:
+    spec:
+      chart: linkerd2
+      sourceRef:
+        kind: HelmRepository
+        name: linkerd
+  valuesFrom:
+    - kind: Secret
+      name: linkerd-certs
+      valuesKey: ca.crt
+      targetPath: global.identityTrustAnchorsPEM
+    - kind: Secret
+      name: linkerd-certs
+      valuesKey: issuer.crt
+      targetPath: identity.issuer.tls.crtPEM
+    - kind: Secret
+      name: linkerd-certs
+      valuesKey: issuer.key
+      targetPath: identity.issuer.tls.keyPEM
+  values:
+    installNamespace: false
+    identity:
+      issuer:
+        crtExpiry: "2021-10-20T10:29:51Z"
