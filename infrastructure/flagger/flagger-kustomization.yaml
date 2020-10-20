@@ -1,0 +1,13 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+metadata:
+  name: flagger
+  namespace: linkerd
+spec:
+  interval: 10m
+  timeout: 5m
+  path: "./kustomize/linkerd/"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flagger
