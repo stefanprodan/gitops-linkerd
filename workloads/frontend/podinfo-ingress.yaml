@@ -1,0 +1,13 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: podinfo-ingress
+  namespace: frontend
+spec:
+  virtualhost:
+    fqdn: 127.0.0.1.xip.io
+  includes:
+    - name: podinfo
+      namespace: frontend
+      conditions:
+        - prefix: /

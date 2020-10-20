@@ -1,0 +1,14 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: GitRepository
+metadata:
+  name: podinfo
+  namespace: frontend
+spec:
+  interval: 1m
+  url: https://github.com/stefanprodan/podinfo
+  ref:
+    tag: 5.0.0
+  ignore: |
+    /*
+    !/kustomize/deployment.yaml
+    !/kustomize/hpa.yaml
