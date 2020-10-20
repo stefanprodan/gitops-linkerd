@@ -1,0 +1,19 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+metadata:
+  name: loadtester
+  namespace: backend
+spec:
+  targetNamespace: backend
+  interval: 1m
+  path: "./kustomize/tester/"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flagger
+    namespace: linkerd
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: flagger-loadtester
+      namespace: backend
