@@ -7,7 +7,7 @@ spec:
   interval: 1m
   url: https://github.com/stefanprodan/podinfo
   ref:
-    tag: 5.0.1 # {"$imagepolicy": "flux-system:frontend-policy:tag"}
+    tag: 5.0.0 # {"$imagepolicy": "flux-system:frontend-policy:tag"}
   ignore: |
     /*
     !/kustomize/deployment.yaml
