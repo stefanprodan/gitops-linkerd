@@ -7,7 +7,7 @@ spec:
   interval: 1m
   url: https://github.com/stefanprodan/podinfo
   ref:
-    semver: ">5.0.0"
+    tag: 5.0.0
   ignore: |
     /*
     !/kustomize/deployment.yaml
