@@ -12,14 +12,13 @@ or newer with Load Balancer support and RBAC enabled.
 Install the CLI on MacOS and Linux using Homebrew run:
 
 ```sh
-brew tap fluxcd/tap
-brew install gotk
+brew install fluxcd/tap/flux
 ```
 
 Verify that your cluster satisfies the prerequisites with:
 
 ```console
-$ gotk check --pre
+$ flux check --pre
 
 ► checking prerequisites
 ✔ kubectl 1.19.2 >=1.18.0
@@ -30,11 +29,11 @@ $ gotk check --pre
 Install the controllers on your cluster:
 
 ```console
-$ gotk install --arch=amd64
+$ flux install --arch=amd64
 
 ✚ generating manifests
 ✔ manifests build completed
-► installing components in gotk-system namespace
+► installing components in flux-system namespace
 ✔ install completed
 ◎ verifying installation
 ✔ source-controller ready
@@ -49,7 +48,7 @@ $ gotk install --arch=amd64
 Create a source that points to this repository:
 
 ```sh
-gotk create source git gitops-linkerd \
+flux create source git gitops-linkerd \
 --url=https://github.com/stefanprodan/gitops-linkerd \
 --branch=main
 ```
@@ -57,7 +56,7 @@ gotk create source git gitops-linkerd \
 Create a Kustomization to reconcile Linkerd on your cluster:
 
 ```sh
-gotk create kustomization linkerd \
+flux create kustomization linkerd \
 --source=gitops-linkerd \
 --path="./infrastructure/linkerd" \
 --prune=true \
@@ -69,7 +68,7 @@ gotk create kustomization linkerd \
 Configure Flagger reconciliation specifying Linkerd as a dependency:
 
 ```sh
-gotk create kustomization flagger \
+flux create kustomization flagger \
 --depends-on=linkerd \
 --source=gitops-linkerd \
 --path="./infrastructure/flagger" \
@@ -82,7 +81,7 @@ gotk create kustomization flagger \
 Configure Contour reconciliation specifying Linkerd as a dependency:
 
 ```sh
-gotk create kustomization contour \
+flux create kustomization contour \
 --depends-on=linkerd \
 --source=gitops-linkerd \
 --path="./infrastructure/contour" \
@@ -99,7 +98,7 @@ Configure the frontend workload with A/B testing deployment strategy and
 the backend workload with progressive traffic shifting:
 
 ```sh
-gotk create kustomization workloads \
+flux create kustomization workloads \
 --depends-on=linkerd \
 --source=gitops-linkerd \
 --path="./workloads" \
