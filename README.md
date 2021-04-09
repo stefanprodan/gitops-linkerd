@@ -29,7 +29,7 @@ $ flux check --pre
 Install the controllers on your cluster:
 
 ```console
-$ flux install --arch=amd64
+$ flux install
 
 ✚ generating manifests
 ✔ manifests build completed
