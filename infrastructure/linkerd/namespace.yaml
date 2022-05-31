@@ -3,4 +3,4 @@ kind: Namespace
 metadata:
   name: linkerd
   labels:
-    linkerd.io/admission-webhooks: disabled
+    config.linkerd.io/admission-webhooks: disabled

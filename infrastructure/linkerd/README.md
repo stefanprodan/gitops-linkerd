@@ -24,11 +24,4 @@ step certificate create identity.linkerd.cluster.local issuer.crt issuer.key \
 --san identity.linkerd.cluster.local
 ```
 
-Generate a Kubernetes secret with the Linkerd certs:
-
-```sh
-kubectl -n linkerd create secret generic linkerd-certs \
---from-file=ca.crt --from-file=issuer.crt \
---from-file=issuer.key -oyaml --dry-run=client \
-> linkerd-certs.yaml
-```
+Update the expiry date in the Linkerd [HelmRelease](linkerd-release.yaml) values.

@@ -1,13 +1,13 @@
-apiVersion: source.toolkit.fluxcd.io/v1beta1
+apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: GitRepository
 metadata:
   name: flagger
   namespace: linkerd
 spec:
   interval: 10m
-  url: https://github.com/weaveworks/flagger
+  url: https://github.com/fluxcd/flagger
   ref:
-    tag: v1.6.4
+    semver: v1.x
   ignore: |
     /*
     !/kustomize
