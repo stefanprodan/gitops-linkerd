@@ -2,8 +2,8 @@ apiVersion: flagger.app/v1beta1
 kind: Canary
 metadata:
   name: podinfo
-  namespace: backend
 spec:
+  provider: nginx
   # deployment reference
   targetRef:
     apiVersion: apps/v1
@@ -11,15 +11,20 @@ spec:
     name: podinfo
   # HPA reference (optional)
   autoscalerRef:
-    apiVersion: autoscaling/v2beta1
+    apiVersion: autoscaling/v2
     kind: HorizontalPodAutoscaler
+    name: podinfo
+  # Ingress reference
+  ingressRef:
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
     name: podinfo
   # the maximum time in seconds for the canary deployment
   # to make progress before it is rollback (default 600s)
   progressDeadlineSeconds: 60
   service:
     # ClusterIP port number
-    port: 9898
+    port: 80
     # container port number or name (optional)
     targetPort: 9898
   analysis:
@@ -27,12 +32,16 @@ spec:
     interval: 10s
     # max number of failed metric checks before rollback
     threshold: 3
-    # max traffic percentage routed to canary
-    # percentage (0-100)
-    maxWeight: 50
-    # canary increment step
-    # percentage (0-100)
-    stepWeight: 5
+    # A/B test interactions
+    iterations: 10
+    # A/B test routing
+    match:
+      - headers:
+          user-agent:
+            prefix: "Firefox"
+      - headers:
+          x-user:
+            exact: "insider"
     # Linkerd Prometheus checks
     metrics:
       - name: request-success-rate
@@ -51,13 +60,18 @@ spec:
     webhooks:
       - name: acceptance-test
         type: pre-rollout
-        url: http://flagger-loadtester.backend/
+        url: http://flagger-loadtester.flagger-system/
         timeout: 30s
         metadata:
           type: bash
-          cmd: "curl -sd 'test' http://podinfo-canary.backend:9898/token | grep token"
+          cmd: "curl -sd 'test' http://podinfo-canary.frontend/token | grep token"
       - name: load-test
         type: rollout
-        url: http://flagger-loadtester.backend/
+        url: http://flagger-loadtester.flagger-system/
         metadata:
-          cmd: "hey -z 2m -q 10 -c 2 http://podinfo-canary.backend:9898/"
+          cmd: "hey -z 2m -q 10 -c 2 -H 'x-user: insider' -host app.example.com http://ingress-nginx-controller.ingress-nginx"
+      - name: load-test-primary
+        type: rollout
+        url: http://flagger-loadtester.flagger-system/
+        metadata:
+          cmd: "hey -z 2m -q 10 -c 2 -H 'x-user: production' -host app.example.com http://ingress-nginx-controller.ingress-nginx"

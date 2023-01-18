@@ -2,9 +2,8 @@ apiVersion: flagger.app/v1beta1
 kind: Canary
 metadata:
   name: podinfo
-  namespace: frontend
 spec:
-  provider: contour
+  provider: linkerd
   # deployment reference
   targetRef:
     apiVersion: apps/v1
@@ -12,7 +11,7 @@ spec:
     name: podinfo
   # HPA reference (optional)
   autoscalerRef:
-    apiVersion: autoscaling/v2beta1
+    apiVersion: autoscaling/v2
     kind: HorizontalPodAutoscaler
     name: podinfo
   # the maximum time in seconds for the canary deployment
@@ -20,7 +19,7 @@ spec:
   progressDeadlineSeconds: 60
   service:
     # ClusterIP port number
-    port: 9898
+    port: 80
     # container port number or name (optional)
     targetPort: 9898
   analysis:
@@ -28,13 +27,12 @@ spec:
     interval: 10s
     # max number of failed metric checks before rollback
     threshold: 3
-    # A/B test interactions
-    iterations: 10
-    # A/B test routing
-    match:
-      - headers:
-          user-agent:
-            prefix: "Firefox"
+    # max traffic percentage routed to canary
+    # percentage (0-100)
+    maxWeight: 50
+    # canary increment step
+    # percentage (0-100)
+    stepWeight: 5
     # Linkerd Prometheus checks
     metrics:
       - name: request-success-rate
@@ -53,13 +51,13 @@ spec:
     webhooks:
       - name: acceptance-test
         type: pre-rollout
-        url: http://flagger-loadtester.frontend/
+        url: http://flagger-loadtester.flagger-system/
         timeout: 30s
         metadata:
           type: bash
-          cmd: "curl -sd 'test' http://podinfo-canary.frontend:9898/token | grep token"
+          cmd: "curl -sd 'test' http://podinfo-canary.backend/token | grep token"
       - name: load-test
         type: rollout
-        url: http://flagger-loadtester.frontend/
+        url: http://flagger-loadtester.flagger-system/
         metadata:
-          cmd: "hey -z 2m -q 10 -c 2 http://podinfo-canary.frontend:9898/token"
+          cmd: "hey -z 2m -q 10 -c 2 http://podinfo.backend/"

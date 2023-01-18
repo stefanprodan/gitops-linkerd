@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: linkerd
+  annotations:
+    linkerd.io/inject: disabled
+    kustomize.toolkit.fluxcd.io/ssa: merge
+  labels:
+    linkerd.io/is-control-plane: "true"
+    config.linkerd.io/admission-webhooks: disabled
+    linkerd.io/control-plane-ns: linkerd
+    toolkit.fluxcd.io/tenant: sre-team
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: linkerd-smi
+  annotations:
+    kustomize.toolkit.fluxcd.io/ssa: merge
+  labels:
+    linkerd.io/extension: smi
+    toolkit.fluxcd.io/tenant: sre-team
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: linkerd-viz
+  annotations:
+    kustomize.toolkit.fluxcd.io/ssa: merge
+  labels:
+    linkerd.io/extension: viz
+    toolkit.fluxcd.io/tenant: sre-team

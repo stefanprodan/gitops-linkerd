@@ -15,17 +15,6 @@ Install the CLI on MacOS and Linux using Homebrew run:
 brew install fluxcd/tap/flux
 ```
 
-Verify that your cluster satisfies the prerequisites with:
-
-```console
-$ flux check --pre
-
-► checking prerequisites
-✔ kubectl 1.19.2 >=1.18.0
-✔ Kubernetes 1.18.9 >=1.16.0
-✔ prerequisites checks passed
-```
-
 Install the controllers on your cluster:
 
 ```console
@@ -48,9 +37,10 @@ $ flux install
 Create a source that points to this repository:
 
 ```sh
-flux create source git gitops-linkerd \
+flux create source git flux-system \
+--interval=1m \
 --url=https://github.com/stefanprodan/gitops-linkerd \
---branch=main
+--branch=v2
 ```
 
 Create a Kustomization to reconcile Linkerd on your cluster:
@@ -60,9 +50,8 @@ flux create kustomization linkerd \
 --source=gitops-linkerd \
 --path="./infrastructure/linkerd" \
 --prune=true \
---validation=client \
---interval=1m \
---health-check="Deployment/linkerd-proxy-injector.linkerd"
+--interval=30m \
+--wait=true
 ```
 
 Configure Flagger reconciliation specifying Linkerd as a dependency:
@@ -73,23 +62,21 @@ flux create kustomization flagger \
 --source=gitops-linkerd \
 --path="./infrastructure/flagger" \
 --prune=true \
---validation=client \
---interval=1m \
---health-check="Deployment/flagger.linkerd"
+--interval=30m \
+--wait=true
 ```
 
 Configure Contour reconciliation specifying Linkerd as a dependency:
 
 ```sh
-flux create kustomization contour \
+flux create kustomization ingress-nginx \
 --depends-on=linkerd \
 --source=gitops-linkerd \
---path="./infrastructure/contour" \
+--path="./infrastructure/ingress-nginx" \
 --prune=true \
 --validation=client \
---interval=1m \
---health-check="Deployment/contour.projectcontour" \
---health-check="DaemonSet/envoy.projectcontour"
+--interval=30m \
+--wait-true
 ```
 
 ## Workloads setup
@@ -98,11 +85,11 @@ Configure the frontend workload with A/B testing deployment strategy and
 the backend workload with progressive traffic shifting:
 
 ```sh
-flux create kustomization workloads \
+flux create kustomization apps \
 --depends-on=linkerd \
 --source=gitops-linkerd \
---path="./workloads" \
+--path="./apps" \
 --prune=true \
---validation=client \
---interval=1m
+--interval=30m \
+--wait-true
 ```

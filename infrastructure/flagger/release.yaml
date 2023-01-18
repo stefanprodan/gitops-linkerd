@@ -1,0 +1,22 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: flagger
+spec:
+  interval: 1h
+  releaseName: flagger
+  install: # override existing Flagger CRDs
+    crds: CreateReplace
+  upgrade: # update Flagger CRDs
+    crds: CreateReplace
+  chart:
+    spec:
+      chart: flagger
+      version: 1.x # update Flagger to the latest minor version
+      interval: 6h # scan for new versions every six hours
+      sourceRef:
+        kind: HelmRepository
+        name: flagger
+  values:
+    meshProvider: linkerd
+    metricsServer: http://prometheus.linkerd-viz:9090

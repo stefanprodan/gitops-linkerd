@@ -1,7 +1,8 @@
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
-  name: linkerd2-stable
+  name: flagger
 spec:
-  interval: 60m0s
-  url: https://helm.linkerd.io/stable
+  interval: 6h
+  type: oci
+  url: oci://ghcr.io/fluxcd/charts

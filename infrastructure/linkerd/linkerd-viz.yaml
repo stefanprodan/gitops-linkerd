@@ -2,18 +2,23 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: linkerd-viz
+  namespace: linkerd-viz
 spec:
+  interval: 30m
+  targetNamespace: linkerd-viz
   dependsOn:
-    - name: linkerd2
-  interval: 5m
+    - name: linkerd-control-plane
+      namespace: linkerd
+  releaseName: linkerd-viz
   chart:
     spec:
-      version: "2.x"
+      version: "30.x"
       chart: linkerd-viz
       sourceRef:
         kind: HelmRepository
-        name: linkerd2-stable
-      interval: 60m
+        name: linkerd
+        namespace: linkerd
+      interval: 12h
   # https://artifacthub.io/packages/helm/linkerd2/linkerd-viz
   values:
     grafana:

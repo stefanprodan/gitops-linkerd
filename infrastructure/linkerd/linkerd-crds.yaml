@@ -1,0 +1,19 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: linkerd-crds
+  namespace: linkerd
+spec:
+  interval: 30m
+  targetNamespace: linkerd
+  releaseName: linkerd-crds
+  chart:
+    spec:
+      version: "1.x"
+      chart: linkerd-crds
+      sourceRef:
+        kind: HelmRepository
+        name: linkerd
+      interval: 12h
+
+
