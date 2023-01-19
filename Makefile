@@ -9,7 +9,7 @@ tools: ## Install Kubernetes kind, kubectl, FLux CLI and other tools with Homebr
 
 .PHONY: validate
 validate: ## Validate the Kubernetes manifests (including Flux custom resources)
-	scripts/test/validate.sh
+	scripts/validate.sh
 
 .PHONY: help
 help:  ## Display this help menu

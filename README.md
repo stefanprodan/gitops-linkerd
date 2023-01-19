@@ -7,6 +7,8 @@ Progressive Delivery workshop with [Linkerd](https://github.com/linkerd/linkerd2
 [Flagger](https://github.com/fluxcd/flagger), [Flux](https://github.com/fluxcd/flux)
 and [Weave GitOps](https://github.com/weaveworks/weave-gitops).
 
+![flux-ui](docs/screens/wego-apps.png)
+
 ## Introduction
 
 ### What is GitOps?
@@ -95,6 +97,8 @@ When Flux has access to your repository it will do the following:
 * creates the frontend deployment and configures it for A/B testing
 * creates the backend deployment and configures it for progressive traffic shifting
 
+![flux-ui](docs/screens/wego-deps.png)
+
 Watch Flux installing Linkerd first, then the demo apps:
 
 ```bash
@@ -106,28 +110,6 @@ For the applications pods to be injected with Linkerd proxy,
 the Linkerd control plane must be up and running before the apps.
 For the ingress controller to forward traffic to the apps, NGINX must be injected with the Linker sidecar.
 
-With Flux you can specify the execution order by defining dependencies between objects.
-For example, in `clusters/my-cluster/infrastructure.yaml`
-we tell Flux that the `ingress-nginx` reconciliation depends on the `linkerd` one:
-
-```yaml
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-kind: Kustomization
-metadata:
-  name: ingress-nginx
-  namespace: flux-system
-spec:
-  dependsOn:
-    - name: linkerd
-  interval: 1h
-  prune: true
-  wait: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: ./infrastructure/ingress-nginx
-```
-
 ## Access the dashboards
 
 To access the Flux dashboard, start port forwarding with:
@@ -138,10 +120,15 @@ kubectl -n flux-system port-forward svc/weave-gitops 9001:9001 &
 
 Navigate to `http://localhost:9001` and login using the username `admin` and the password `flux`.
 
+![flux-ui](docs/screens/wego-linkerd.png)
+
 To access the Linkerd dashboard, start port forwarding with:
 
 ```sh
-kubectl -n linkerd-viz port-forward port-forward svc/web 8084:8084 &
+kubectl -n linkerd-viz port-forward svc/web 8084:8084 &
 ```
 
 Navigate to `http://localhost:8084` to access the dashboard.
+
+![linkerd-ui](docs/screens/linkerd-metrics.png)
+
