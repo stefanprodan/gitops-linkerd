@@ -7,13 +7,13 @@ resources:
   - linkerd-control-plane.yaml
   - linkerd-viz.yaml
   - linkerd-smi.yaml
+  - linkerd-certs.yaml
   - repositories.yaml
   - namespaces.yaml
 secretGenerator:
-  - name: linkerd-certs
+  - name: linkerd-trust-anchor
     namespace: linkerd
+    type: kubernetes.io/tls
     files:
-      - ca.crt
-      - ca.key
-      - issuer.crt
-      - issuer.key
+      - tls.crt=ca.crt
+      - tls.key=ca.key

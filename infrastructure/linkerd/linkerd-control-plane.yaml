@@ -20,14 +20,10 @@ spec:
   # https://artifacthub.io/packages/helm/linkerd2/linkerd-control-plane
   valuesFrom:
     - kind: Secret
-      name: linkerd-certs
-      valuesKey: ca.crt
+      name: linkerd-trust-anchor
+      valuesKey: tls.crt
       targetPath: identityTrustAnchorsPEM
-    - kind: Secret
-      name: linkerd-certs
-      valuesKey: issuer.crt
-      targetPath: identity.issuer.tls.crtPEM
-    - kind: Secret
-      name: linkerd-certs
-      valuesKey: issuer.key
-      targetPath: identity.issuer.tls.keyPEM
+  values:
+    identity:
+      issuer:
+        scheme: "kubernetes.io/tls"
