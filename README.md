@@ -1,5 +1,8 @@
 # gitops-linkerd
 
+[![test](https://github.com/stefanprodan/gitops-linkerd/workflows/test/badge.svg)](https://github.com/stefanprodan/gitops-linkerd/actions)
+[![license](https://img.shields.io/github/license/stefanprodan/gitops-linkerd.svg)](https://github.com/stefanprodan/gitops-linkerd/blob/main/LICENSE)
+
 Progressive Delivery workshop with [Linkerd](https://github.com/linkerd/linkerd2),
 [Flagger](https://github.com/fluxcd/flagger), [Flux](https://github.com/fluxcd/flux)
 and [Weave GitOps](https://github.com/weaveworks/weave-gitops).

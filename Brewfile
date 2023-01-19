@@ -5,8 +5,6 @@ brew "kind"
 # Kubernetes tools
 brew "yq"
 brew "jq"
-brew "cue"
-brew "helm"
 brew "kustomize"
 brew "kubeconform"
 
