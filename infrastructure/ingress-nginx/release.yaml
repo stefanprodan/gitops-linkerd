@@ -1,0 +1,28 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: ingress-nginx
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: ingress-nginx
+      version: "*"
+      sourceRef:
+        kind: HelmRepository
+        name: ingress-nginx
+      interval: 12h
+  values:
+    controller:
+      service:
+        type: "NodePort"
+      podAnnotations:
+        linkerd.io/inject: enabled
+    metrics:
+      port: 10254
+      enabled: true
+      service:
+        annotations:
+          prometheus.io/scrape: "true"
+          prometheus.io/port: "10254"

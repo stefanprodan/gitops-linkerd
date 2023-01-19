@@ -1,108 +1,147 @@
 # gitops-linkerd
 
-Progressive Delivery with Linkerd, Flagger and Flux v2
+[![test](https://github.com/stefanprodan/gitops-linkerd/workflows/test/badge.svg)](https://github.com/stefanprodan/gitops-linkerd/actions)
+[![license](https://img.shields.io/github/license/stefanprodan/gitops-linkerd.svg)](https://github.com/stefanprodan/gitops-linkerd/blob/main/LICENSE)
+
+Progressive Delivery workshop with [Linkerd](https://github.com/linkerd/linkerd2),
+[Flagger](https://github.com/fluxcd/flagger), [Flux](https://github.com/fluxcd/flux)
+and [Weave GitOps](https://github.com/weaveworks/weave-gitops).
+
+## Introduction
+
+### What is GitOps?
+
+GitOps is a way to do Continuous Delivery, it works by using Git as a source of truth
+for declarative infrastructure and workloads.
+For Kubernetes this means using `git push` instead of `kubectl apply/delete` or `helm install/upgrade`.
+
+In this workshop you'll be using GitHub to host the config repository and [Flux](https://fluxcd.io)
+as the GitOps delivery solution.
+
+### What is Progressive Delivery?
+
+Progressive delivery is an umbrella term for advanced deployment patterns like canaries, feature flags and A/B testing.
+Progressive delivery techniques are used to reduce the risk of introducing a new software version in production
+by giving app developers and SRE teams a fine-grained control over the blast radius.
+
+In this workshop you'll be using [Flagger](https://flagger.app), [Linkerd](https://github.com/linkerd/linkerd2) and
+Prometheus to automate Canary Releases and A/B Testing for your applications.
 
 ## Prerequisites
 
-In order to install the workshop prerequisites you'll need a Kubernetes cluster 1.18
-or newer with Load Balancer support and RBAC enabled.
+For this workshop you will need a GitHub account and a Kubernetes cluster version 1.21
+or newer with **Load Balancer** support.
 
-### Install Flux v2
+In order to follow the guide you'll need a GitHub account and a
+[personal access token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line)
+that can create repositories (check all permissions under `repo`).
 
-Install the CLI on MacOS and Linux using Homebrew run:
+### Fork the repository
 
-```sh
-brew install fluxcd/tap/flux
-```
-
-Verify that your cluster satisfies the prerequisites with:
-
-```console
-$ flux check --pre
-
-► checking prerequisites
-✔ kubectl 1.19.2 >=1.18.0
-✔ Kubernetes 1.18.9 >=1.16.0
-✔ prerequisites checks passed
-```
-
-Install the controllers on your cluster:
-
-```console
-$ flux install
-
-✚ generating manifests
-✔ manifests build completed
-► installing components in flux-system namespace
-✔ install completed
-◎ verifying installation
-✔ source-controller ready
-✔ kustomize-controller ready
-✔ helm-controller ready
-✔ notification-controller ready
-✔ install finished
-```
-
-## Infrastructure setup
-
-Create a source that points to this repository:
+Start by forking the [gitops-linkerd](https://github.com/stefanprodan/gitops-linkerd)
+repository on your own GitHub account.
+Then generate a GitHub
+[personal access token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line)
+that can create repositories (check all permissions under `repo`),
+and export your GitHub token, username and repo name as environment variables:
 
 ```sh
-flux create source git gitops-linkerd \
---url=https://github.com/stefanprodan/gitops-linkerd \
---branch=main
+export GITHUB_TOKEN=<your-token>
+export GITHUB_USER=<your-username>
+export GITHUB_REPO="gitops-linkerd"
 ```
 
-Create a Kustomization to reconcile Linkerd on your cluster:
+Next clone your repository locally with:
+
+```shell
+git clone https://github.com/${GITHUB_USER}/${GITHUB_REPO}.git
+cd ${GITHUB_REPO}
+```
+
+### Install CLI tools
+
+Install flux, kubectl, linkerd, step and other CLI tools with Homebrew:
+
+```shell
+brew bundle
+```
+
+The complete list of tools can be found in the `Brewfile`.
+
+## Cluster bootstrap
+
+With the `flux bootstrap` command you can install Flux on a Kubernetes cluster and configure
+it to manage itself from a Git repository. If the Flux components are present on the cluster,
+the bootstrap command will perform an upgrade if needed.
+
+```shell
+flux bootstrap github \
+  --owner=${GITHUB_USER} \
+  --repository=${GITHUB_REPO} \
+  --branch=main \
+  --path=./clusters/my-cluster \
+  --personal
+```
+
+When Flux has access to your repository it will do the following:
+
+* installs the Flux UI (Weave GitOps OSS)
+* installs cert-manager and generates the Linkerd trust anchor certificate
+* installs Linkerd  using the `linkerd-crds`, `linkerd-control-plane`, `linkerd-viz` and `linkerd-smi` Helm charts
+* waits for the Linkerd control plane to be ready
+* installs the Kubernetes NGINX ingress in the `ingress-nginx` namespace
+* installs Flagger and configures its load testing service inside the `flagger-system` namespace
+* waits for NGINX and Flagger to be ready
+* creates the frontend deployment and configures it for A/B testing
+* creates the backend deployment and configures it for progressive traffic shifting
+
+Watch Flux installing Linkerd first, then the demo apps:
+
+```bash
+flux get kustomizations --watch
+```
+
+When bootstrapping a cluster with Linkerd, it is important to control the installation order.
+For the applications pods to be injected with Linkerd proxy,
+the Linkerd control plane must be up and running before the apps.
+For the ingress controller to forward traffic to the apps, NGINX must be injected with the Linker sidecar.
+
+With Flux you can specify the execution order by defining dependencies between objects.
+For example, in `clusters/my-cluster/infrastructure.yaml`
+we tell Flux that the `ingress-nginx` reconciliation depends on the `linkerd` one:
+
+```yaml
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: ingress-nginx
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: linkerd
+  interval: 1h
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./infrastructure/ingress-nginx
+```
+
+## Access the dashboards
+
+To access the Flux dashboard, start port forwarding with:
 
 ```sh
-flux create kustomization linkerd \
---source=gitops-linkerd \
---path="./infrastructure/linkerd" \
---prune=true \
---validation=client \
---interval=1m \
---health-check="Deployment/linkerd-proxy-injector.linkerd"
+kubectl -n flux-system port-forward svc/weave-gitops 9001:9001 &
 ```
 
-Configure Flagger reconciliation specifying Linkerd as a dependency:
+Navigate to `http://localhost:9001` and login using the username `admin` and the password `flux`.
+
+To access the Linkerd dashboard, start port forwarding with:
 
 ```sh
-flux create kustomization flagger \
---depends-on=linkerd \
---source=gitops-linkerd \
---path="./infrastructure/flagger" \
---prune=true \
---validation=client \
---interval=1m \
---health-check="Deployment/flagger.linkerd"
+kubectl -n linkerd-viz port-forward port-forward svc/web 8084:8084 &
 ```
 
-Configure Contour reconciliation specifying Linkerd as a dependency:
-
-```sh
-flux create kustomization contour \
---depends-on=linkerd \
---source=gitops-linkerd \
---path="./infrastructure/contour" \
---prune=true \
---validation=client \
---interval=1m \
---health-check="Deployment/contour.projectcontour" \
---health-check="DaemonSet/envoy.projectcontour"
-```
-
-## Workloads setup
-
-Configure the frontend workload with A/B testing deployment strategy and
-the backend workload with progressive traffic shifting:
-
-```sh
-flux create kustomization workloads \
---depends-on=linkerd \
---source=gitops-linkerd \
---path="./workloads" \
---prune=true \
---validation=client \
---interval=1m
-```
+Navigate to `http://localhost:8084` to access the dashboard.

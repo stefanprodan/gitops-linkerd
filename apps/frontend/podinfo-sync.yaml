@@ -1,0 +1,29 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+  name: podinfo
+spec:
+  interval: 12h
+  url: https://github.com/stefanprodan/podinfo
+  ref:
+    branch: master
+  ignore: |
+    /*
+    !/kustomize/deployment.yaml
+    !/kustomize/hpa.yaml
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: podinfo
+spec:
+  targetNamespace: frontend
+  interval: 10m
+  path: "./kustomize/"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: podinfo
+  images:
+    - name: ghcr.io/stefanprodan/podinfo
+      newTag: 6.2.0

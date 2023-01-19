@@ -1,17 +1,19 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: linkerd
 configurations:
   - kustomizeconfig.yaml
 resources:
-  - namespace.yaml
-  - linker-stable-repository.yaml
-  - linkerd-release.yaml
-  - linkerd-viz-release.yaml
+  - linkerd-crds.yaml
+  - linkerd-control-plane.yaml
+  - linkerd-viz.yaml
+  - linkerd-smi.yaml
+  - linkerd-certs.yaml
+  - repositories.yaml
+  - namespaces.yaml
 secretGenerator:
-  - name: linkerd-certs
+  - name: linkerd-trust-anchor
+    namespace: linkerd
+    type: kubernetes.io/tls
     files:
-      - ca.crt
-      - ca.key
-      - issuer.crt
-      - issuer.key
+      - tls.crt=ca.crt
+      - tls.key=ca.key
