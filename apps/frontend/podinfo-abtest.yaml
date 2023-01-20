@@ -38,7 +38,7 @@ spec:
     match:
       - headers:
           user-agent:
-            regex: ".*Firefox.*"
+            regex: ".*Chrome.*"
       - headers:
           x-user:
             exact: "insider"
