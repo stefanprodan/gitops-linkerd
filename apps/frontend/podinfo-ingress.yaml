@@ -9,7 +9,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: "app.example.com"
+    - host: "*"
       http:
         paths:
           - pathType: Prefix
