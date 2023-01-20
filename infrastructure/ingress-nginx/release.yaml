@@ -16,7 +16,7 @@ spec:
   values:
     controller:
       service:
-        #type: "NodePort"
+        type: "LoadBalancer" #"NodePort"
       podAnnotations:
         linkerd.io/inject: enabled
     metrics:

@@ -115,7 +115,7 @@ For the ingress controller to forward traffic to the apps, NGINX must be injecte
 To access the Flux dashboard, start port forwarding with:
 
 ```sh
-kubectl -n flux-system port-forward svc/weave-gitops 9001:9001 &
+kubectl -n flux-system port-forward svc/weave-gitops 9001:9001
 ```
 
 Navigate to `http://localhost:9001` and login using the username `admin` and the password `flux`.
@@ -125,7 +125,7 @@ Navigate to `http://localhost:9001` and login using the username `admin` and the
 To access the Linkerd dashboard, start port forwarding with:
 
 ```sh
-kubectl -n linkerd-viz port-forward svc/web 8084:8084 &
+kubectl -n linkerd-viz port-forward svc/web 8084:8084
 ```
 
 Navigate to `http://localhost:8084` to access the dashboard.
