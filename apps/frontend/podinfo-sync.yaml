@@ -26,4 +26,4 @@ spec:
     name: podinfo
   images:
     - name: ghcr.io/stefanprodan/podinfo
-      newTag: 6.2.3
+      newTag: 6.2.0
