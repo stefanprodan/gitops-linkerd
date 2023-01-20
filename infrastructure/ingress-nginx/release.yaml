@@ -16,7 +16,7 @@ spec:
   values:
     controller:
       service:
-        type: "NodePort"
+        #type: "NodePort"
       podAnnotations:
         linkerd.io/inject: enabled
     metrics:
