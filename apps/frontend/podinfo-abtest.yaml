@@ -37,9 +37,6 @@ spec:
     # A/B test routing
     match:
       - headers:
-          user-agent:
-            regex: ".*Chrome.*"
-      - headers:
           x-user:
             exact: "insider"
     # Linkerd Prometheus checks
