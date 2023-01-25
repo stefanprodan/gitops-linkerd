@@ -37,9 +37,6 @@ spec:
     # A/B test routing
     match:
       - headers:
-          user-agent:
-            prefix: "Firefox"
-      - headers:
           x-user:
             exact: "insider"
     # Linkerd Prometheus checks
@@ -69,9 +66,9 @@ spec:
         type: rollout
         url: http://flagger-loadtester.flagger-system/
         metadata:
-          cmd: "hey -z 2m -q 10 -c 2 -H 'x-user: insider' -host app.example.com http://ingress-nginx-controller.ingress-nginx"
+          cmd: "hey -z 2m -q 10 -c 2 -H 'x-user: insider' -host podinfo.sslip.io http://ingress-nginx-controller.ingress-nginx"
       - name: load-test-primary
         type: rollout
         url: http://flagger-loadtester.flagger-system/
         metadata:
-          cmd: "hey -z 2m -q 10 -c 2 -H 'x-user: production' -host app.example.com http://ingress-nginx-controller.ingress-nginx"
+          cmd: "hey -z 2m -q 10 -c 2 -H 'x-user: production' -host podinfo.sslip.io http://ingress-nginx-controller.ingress-nginx"
