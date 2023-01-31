@@ -15,7 +15,7 @@ metadata:
 spec:
   interval: 30m
   targetNamespace: flagger-system
-  path: "./kustomize/tester/"
+  path: "./tester/"
   prune: true
   sourceRef:
     kind: OCIRepository
