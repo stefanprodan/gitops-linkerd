@@ -4,4 +4,3 @@ namespace: flux-system
 resources:
   - repository.yaml
   - release.yaml
-

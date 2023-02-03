@@ -15,5 +15,3 @@ spec:
         kind: HelmRepository
         name: linkerd
       interval: 12h
-
-
