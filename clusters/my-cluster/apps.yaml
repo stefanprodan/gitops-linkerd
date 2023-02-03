@@ -7,7 +7,7 @@ metadata:
 spec:
   dependsOn:
     - name: flagger
-    # - name: ingress-nginx
+    - name: ingress-nginx
   interval: 1h
   retryInterval: 1m
   timeout: 5m
