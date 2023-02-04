@@ -14,8 +14,8 @@ patches:
   - patch: |-
       - op: replace
         path: "/spec/template/spec/containers/0/env/0/value" # PODINFO_UI_COLOR
-        # value: "#34577c"
-        value: "#3c7c34"
+        value: "#34577c"
+        # value: "#3c7c34"
     target:
       kind: Deployment
       name: podinfo
