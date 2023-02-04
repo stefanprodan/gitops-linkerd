@@ -3,5 +3,9 @@ kind: Kustomization
 namespace: backend
 resources:
   - namespace.yaml
-  - podinfo-sync.yaml
+  - podinfo-deploy.yaml
+  - podinfo-hpa.yaml
   - podinfo-canary.yaml
+images:
+  - name: ghcr.io/stefanprodan/podinfo
+    newTag: 6.2.1
