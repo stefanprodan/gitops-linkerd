@@ -132,3 +132,14 @@ Navigate to `http://localhost:8084` to access the dashboard.
 
 ![linkerd-ui](docs/screens/linkerd-metrics.png)
 
+```sh
+kubectl -n flagger-system exec -it deploy/flagger-loadtester -c loadtester -- sh
+```
+
+```sh
+hey -z 2m -q 10 -c 2 http://podinfo-canary.backend/status/500
+```
+
+```sh
+hey -z 2m -q 10 -c 2 -H 'x-user: insider' -host podinfo.sslip.io http://ingress-nginx-controller.ingress-nginx/status/500
+```
