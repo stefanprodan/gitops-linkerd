@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: frontend
 resources:
   - namespace.yaml
-  - podinfo-sync.yaml
+  - podinfo-deploy.yaml
+  - podinfo-hpa.yaml
   - podinfo-abtest.yaml
   - podinfo-ingress.yaml
