@@ -7,3 +7,6 @@ resources:
   # - podinfo-hpa.yaml
   - podinfo-abtest.yaml
   - podinfo-ingress.yaml
+images:
+  - name: ghcr.io/stefanprodan/podinfo
+    newTag: 6.2.0
