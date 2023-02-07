@@ -48,3 +48,22 @@ spec:
   podSelector:
     matchLabels:
       app.kubernetes.io/name: weave-gitops
+---
+# https://linkerd.io/2.12/tasks/exposing-dashboard/#nginx
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: wego-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: "*.wge.sslip.io"
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: weave-gitops
+                port:
+                  name: http
