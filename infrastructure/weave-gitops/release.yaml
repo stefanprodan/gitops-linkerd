@@ -49,7 +49,6 @@ spec:
     matchLabels:
       app.kubernetes.io/name: weave-gitops
 ---
-# https://linkerd.io/2.12/tasks/exposing-dashboard/#nginx
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -57,7 +56,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: "*.wge.sslip.io"
+    - host: "*.wego.sslip.io"
       http:
         paths:
           - pathType: Prefix
