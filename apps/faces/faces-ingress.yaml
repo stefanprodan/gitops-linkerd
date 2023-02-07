@@ -4,8 +4,6 @@ metadata:
   name: faces-gui
   labels:
     app: faces-gui
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx
   rules:
@@ -13,7 +11,7 @@ spec:
       http:
         paths:
           - pathType: Prefix
-            path: /faces
+            path: /
             backend:
               service:
                 name: faces-gui
