@@ -8,4 +8,4 @@ resources:
   - podinfo-canary.yaml
 images:
   - name: ghcr.io/stefanprodan/podinfo
-    newTag: 6.2.1
+    newTag: 6.2.2
