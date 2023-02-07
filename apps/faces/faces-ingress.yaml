@@ -5,7 +5,7 @@ metadata:
   labels:
     app: faces-gui
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: "/"
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx
   rules:
@@ -13,28 +13,28 @@ spec:
       http:
         paths:
           - pathType: Prefix
-            path: "/faces"
+            path: /faces
             backend:
               service:
                 name: faces-gui
                 port:
                   name: http
           - pathType: Prefix
-            path: "/color"
+            path: /color
             backend:
               service:
                 name: color
                 port:
                   name: http
           - pathType: Prefix
-            path: "/face"
+            path: /face
             backend:
               service:
                 name: face
                 port:
                   name: http
           - pathType: Prefix
-            path: "/smiley"
+            path: /smiley
             backend:
               service:
                 name: smiley

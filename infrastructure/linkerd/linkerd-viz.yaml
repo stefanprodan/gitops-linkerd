@@ -25,3 +25,37 @@ spec:
       enabled: true
     prometheus:
       enabled: true
+---
+# https://linkerd.io/2.12/tasks/exposing-dashboard/#nginx
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-ingress
+  namespace: linkerd-viz
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/upstream-vhost: $service_name.$namespace.svc.cluster.local
+    # see https://github.com/linkerd/linkerd2/issues/3697 for details on resolving non-root paths
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      sub_filter_once off;
+      sub_filter '<head>' '<head> <base href="linkerd/">';
+      sub_filter 'src="/' 'src="/linkerd/';
+      sub_filter 'href="/' 'href="/linkerd/';
+      sub_filter '/\/api\/v1\/namespaces\/.*\/proxy/g' '/\/linkerd/g';
+      sub_filter_types text/html text/css text/javascript;
+      proxy_set_header Origin "";
+      proxy_hide_header l5d-remote-ip;
+      proxy_hide_header l5d-server-id;
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: "*.sslip.io"
+      http:
+        paths:
+          - pathType: Prefix
+            path: /linkerd(/|$)(.*)
+            backend:
+              service:
+                name: web
+                port:
+                  name: http
