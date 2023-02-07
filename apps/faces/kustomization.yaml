@@ -4,3 +4,4 @@ namespace: faces
 resources:
   - namespace.yaml
   - faces-sync.yaml
+  - faces-ingress.yaml
