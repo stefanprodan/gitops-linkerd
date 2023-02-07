@@ -60,4 +60,4 @@ spec:
         type: rollout
         url: http://flagger-loadtester.flagger-system/
         metadata:
-          cmd: "hey -z 2m -q 10 -c 2 http://podinfo.backend/"
+          cmd: "hey -z 2m -q 10 -c 2 http://podinfo-canary.backend/"
