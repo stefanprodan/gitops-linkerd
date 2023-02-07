@@ -1,0 +1,42 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: faces-gui
+  labels:
+    app: faces-gui
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: "/"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: "*.sslip.io"
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/faces"
+            backend:
+              service:
+                name: faces-gui
+                port:
+                  name: http
+          - pathType: Prefix
+            path: "/color"
+            backend:
+              service:
+                name: color
+                port:
+                  name: http
+          - pathType: Prefix
+            path: "/face"
+            backend:
+              service:
+                name: face
+                port:
+                  name: http
+          - pathType: Prefix
+            path: "/smiley"
+            backend:
+              service:
+                name: smiley
+                port:
+                  name: http
