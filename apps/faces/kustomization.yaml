@@ -5,6 +5,6 @@ resources:
   - namespace.yaml
   - faces-sync.yaml
   - faces-ingress.yaml
-  - faces-hpa.yaml
+  # - faces-hpa.yaml
   - faces-canary.yaml
   - faces-abtest.yaml

@@ -8,10 +8,10 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: face
-  autoscalerRef:
-    apiVersion: autoscaling/v2
-    kind: HorizontalPodAutoscaler
-    name: face
+  # autoscalerRef:
+  #   apiVersion: autoscaling/v2
+  #   kind: HorizontalPodAutoscaler
+  #   name: face
   progressDeadlineSeconds: 60
   service:
     port: 80
@@ -43,10 +43,10 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: color
-  autoscalerRef:
-    apiVersion: autoscaling/v2
-    kind: HorizontalPodAutoscaler
-    name: color
+  # autoscalerRef:
+  #   apiVersion: autoscaling/v2
+  #   kind: HorizontalPodAutoscaler
+  #   name: color
   progressDeadlineSeconds: 60
   service:
     port: 80
@@ -78,10 +78,10 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: smiley
-  autoscalerRef:
-    apiVersion: autoscaling/v2
-    kind: HorizontalPodAutoscaler
-    name: smiley
+  # autoscalerRef:
+  #   apiVersion: autoscaling/v2
+  #   kind: HorizontalPodAutoscaler
+  #   name: smiley
   progressDeadlineSeconds: 60
   service:
     port: 80
