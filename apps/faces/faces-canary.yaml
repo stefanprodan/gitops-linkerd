@@ -22,17 +22,12 @@ spec:
         thresholdRange:
           min: 99
         interval: 1m
-      - name: request-duration
-        thresholdRange:
-          max: 500
-        interval: 30s
-    # testing (optional)
-    # webhooks:
-    #   - name: load-test
-    #     type: rollout
-    #     url: http://flagger-loadtester.flagger-system/
-    #     metadata:
-    #       cmd: "hey -z 2m -q 10 -c 2 http://face-canary.faces/"
+    webhooks:
+      - name: load-test
+        type: rollout
+        url: http://flagger-loadtester.flagger-system/
+        metadata:
+          cmd: "hey -z 2m -q 10 -c 2 http://face-canary.faces/"
 ---
 apiVersion: flagger.app/v1beta1
 kind: Canary
@@ -58,17 +53,12 @@ spec:
         thresholdRange:
           min: 99
         interval: 1m
-      - name: request-duration
-        thresholdRange:
-          max: 500
-        interval: 30s
-    # testing (optional)
-    # webhooks:
-    #   - name: load-test
-    #     type: rollout
-    #     url: http://flagger-loadtester.flagger-system/
-    #     metadata:
-    #       cmd: "hey -z 2m -q 10 -c 2 http://color-canary.faces/"
+    webhooks:
+      - name: load-test
+        type: rollout
+        url: http://flagger-loadtester.flagger-system/
+        metadata:
+          cmd: "hey -z 2m -q 10 -c 2 http://color-canary.faces/"
 ---
 apiVersion: flagger.app/v1beta1
 kind: Canary
@@ -98,13 +88,12 @@ spec:
         thresholdRange:
           max: 500
         interval: 30s
-    # testing (optional)
-    # webhooks:
-    #   - name: load-test
-    #     type: rollout
-    #     url: http://flagger-loadtester.flagger-system/
-    #     metadata:
-    #       cmd: "hey -z 2m -q 10 -c 2 http://smiley-canary.faces/"
+    webhooks:
+      - name: load-test
+        type: rollout
+        url: http://flagger-loadtester.flagger-system/
+        metadata:
+          cmd: "hey -z 2m -q 10 -c 2 http://smiley-canary.faces/"
 ---
 apiVersion: flagger.app/v1beta1
 kind: Canary
