@@ -30,7 +30,7 @@ spec:
     - name: dwflynn/faces-gui
       newTag: 0.5.0
     - name: dwflynn/faces-service
-      newTag: 0.5.0
+      newTag: 0.6.0
   patches:
     - patch: |
         - op: replace
