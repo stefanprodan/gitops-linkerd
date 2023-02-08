@@ -36,3 +36,14 @@ spec:
       target:
         kind: Deployment
         name: (face|smiley|color)
+    - patch: |
+        - op: add
+          path: /spec/template/spec/containers/0/env
+          value:
+            - name: ERROR_FRACTION
+              value: "0"
+            - name: COLOR_foo
+              value: lightgray
+      target:
+        kind: Deployment
+        name: faces-gui
