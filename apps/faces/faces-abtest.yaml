@@ -30,14 +30,14 @@ spec:
         thresholdRange:
           min: 70
         interval: 1m
-    # webhooks:
-    #   - name: load-test
-    #     type: rollout
-    #     url: http://flagger-loadtester.flagger-system/
-    #     metadata:
-    #       cmd: "hey -z 2m -q 10 -c 2 -H 'x-faces-user: insider' -host faces-gui.faces.sslip.io http://ingress-nginx-controller.ingress-nginx"
-    #   - name: load-test-primary
-    #     type: rollout
-    #     url: http://flagger-loadtester.flagger-system/
-    #     metadata:
-    #       cmd: "hey -z 2m -q 10 -c 2 -H 'x-faces-user: production' -host faces-gui.faces.sslip.io http://ingress-nginx-controller.ingress-nginx"
+    webhooks:
+      - name: load-test
+        type: rollout
+        url: http://flagger-loadtester.flagger-system/
+        metadata:
+          cmd: "hey -z 2m -q 10 -c 2 -H 'x-faces-user: insider' -host faces-gui.faces.sslip.io http://ingress-nginx-controller.ingress-nginx"
+      - name: load-test-primary
+        type: rollout
+        url: http://flagger-loadtester.flagger-system/
+        metadata:
+          cmd: "hey -z 2m -q 10 -c 2 -H 'x-faces-user: production' -host faces-gui.faces.sslip.io http://ingress-nginx-controller.ingress-nginx"
