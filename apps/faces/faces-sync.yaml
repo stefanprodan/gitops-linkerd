@@ -43,7 +43,7 @@ spec:
             - name: ERROR_FRACTION
               value: "0"
             - name: COLOR_foo
-              value: lightgray
+              value: blue
       target:
         kind: Deployment
         name: faces-gui
