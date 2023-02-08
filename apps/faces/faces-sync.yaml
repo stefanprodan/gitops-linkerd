@@ -26,3 +26,13 @@ spec:
   sourceRef:
     kind: GitRepository
     name: faces
+  patches:
+    - patch: |
+        - op: replace
+          path: /spec/template/spec/containers/0/env/1
+          value:
+            name: ERROR_FRACTION
+            value: "0"
+      target:
+        kind: Deployment
+        name: (face|smiley|color)
