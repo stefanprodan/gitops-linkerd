@@ -5,7 +5,7 @@ metadata:
   labels:
     app: faces-gui
   annotations:
-    nginx.ingress.kubernetes.io/service-upstream: "true"
+    nginx.ingress.kubernetes.io/service-upstream: "true" # IMPORTANT!!! -> A/B Canary will not work without it
 spec:
   ingressClassName: nginx
   rules:

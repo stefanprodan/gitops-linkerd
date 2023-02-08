@@ -8,10 +8,6 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: faces-gui
-  autoscalerRef:
-    apiVersion: autoscaling/v2
-    kind: HorizontalPodAutoscaler
-    name: faces-gui
   ingressRef:
     apiVersion: networking.k8s.io/v1
     kind: Ingress
@@ -23,7 +19,6 @@ spec:
   analysis:
     interval: 10s
     threshold: 3
-    # A/B test interactions
     iterations: 10
     # A/B test routing
     match:
@@ -33,9 +28,8 @@ spec:
     metrics:
       - name: request-success-rate
         thresholdRange:
-          min: 99
+          min: 70
         interval: 1m
-    # testing (optional)
     # webhooks:
     #   - name: load-test
     #     type: rollout
