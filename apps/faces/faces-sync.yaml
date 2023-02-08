@@ -26,3 +26,36 @@ spec:
   sourceRef:
     kind: GitRepository
     name: faces
+  patches:
+    - patch: |-
+        - op: add
+          path: "/metadata/labels"
+          value:
+            app: faces-gui
+      target:
+        kind: (Deployment|Service|ServiceProfile)
+        name: faces-gui
+    - patch: |-
+        - op: add
+          path: "/metadata/labels"
+          value:
+            app: face
+      target:
+        kind: (Deployment|Service|ServiceProfile)
+        name: face
+    - patch: |-
+        - op: add
+          path: "/metadata/labels"
+          value:
+            app: smiley
+      target:
+        kind: (Deployment|Service|ServiceProfile)
+        name: smiley
+    - patch: |-
+        - op: add
+          path: "/metadata/labels"
+          value:
+            app: color
+      target:
+        kind: (Deployment|Service|ServiceProfile)
+        name: color
