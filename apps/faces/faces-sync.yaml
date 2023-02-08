@@ -29,33 +29,65 @@ spec:
   patches:
     - patch: |-
         - op: add
-          path: "/metadata/labels"
+          path: "/spec/selector"
           value:
             app: faces-gui
       target:
-        kind: (Deployment|Service|ServiceProfile)
+        kind: Service
         name: faces-gui
     - patch: |-
         - op: add
-          path: "/metadata/labels"
+          path: "/spec/selector/matchLabels"
+          value:
+            app: faces-gui
+      target:
+        kind: Deployment
+        name: faces-gui
+    - patch: |-
+        - op: add
+          path: "/spec/selector"
           value:
             app: face
       target:
-        kind: (Deployment|Service|ServiceProfile)
+        kind: Service
         name: face
     - patch: |-
         - op: add
-          path: "/metadata/labels"
+          path: "/spec/selector/matchLabels"
+          value:
+            app: face
+      target:
+        kind: Deployment
+        name: face
+    - patch: |-
+        - op: add
+          path: "/spec/selector"
           value:
             app: smiley
       target:
-        kind: (Deployment|Service|ServiceProfile)
+        kind: Service
         name: smiley
     - patch: |-
         - op: add
-          path: "/metadata/labels"
+          path: "/spec/selector/matchLabels"
+          value:
+            app: smiley
+      target:
+        kind: Deployment
+        name: smiley
+    - patch: |-
+        - op: add
+          path: "/spec/selector"
           value:
             app: color
       target:
-        kind: (Deployment|Service|ServiceProfile)
+        kind: Service
+        name: color
+    - patch: |-
+        - op: add
+          path: "/spec/selector/matchLabels"
+          value:
+            app: color
+      target:
+        kind: Deployment
         name: color
