@@ -30,14 +30,14 @@ spec:
     - name: dwflynn/faces-gui
       newTag: 0.5.0
     - name: dwflynn/faces-service
-      newTag: 0.6.0
+      newTag: 0.5.0
   patches:
     - patch: |
         - op: replace
           path: /spec/template/spec/containers/0/env/1
           value:
             name: ERROR_FRACTION
-            value: "50"
+            value: "0"
       target:
         kind: Deployment
-        name: (face|smiley|color)
+        name: "(face|smiley|color)"
