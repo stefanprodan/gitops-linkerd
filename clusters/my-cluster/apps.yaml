@@ -2,13 +2,13 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: faces
+  name: apps
   namespace: flux-system
 spec:
   dependsOn:
     - name: flagger
     - name: ingress-nginx
-  interval: 1h
+  interval: 10m
   retryInterval: 1m
   timeout: 5m
   prune: true
@@ -16,4 +16,4 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./apps/faces
+  path: ./apps

@@ -34,13 +34,15 @@ Prometheus to automate Canary Releases and A/B Testing for your applications.
 For this workshop you will need a GitHub account and a Kubernetes cluster version 1.21
 or newer with **Load Balancer** support.
 
+Steps for using a local Kind cluster are [included](#create-kind-cluster) in this document.
+
 In order to follow the guide you'll need a GitHub account and a
 [personal access token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line)
 that can create repositories (check all permissions under `repo`).
 
 ### Fork the repository
 
-Start by forking the [gitops-linkerd](https://github.com/stefanprodan/gitops-linkerd)
+Start by forking the [gitops-linkerd](https://github.com/rparmer/gitops-linkerd)
 repository on your own GitHub account.
 Then generate a GitHub
 [personal access token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line)
@@ -70,6 +72,14 @@ brew bundle
 
 The complete list of tools can be found in the `Brewfile`.
 
+## Create Kind cluster
+
+Everything in this demo can be ran locally in a [Kind](https://kind.sigs.k8s.io/) cluster and a configuration file is included will automatically expose the nginx controller to the localhost.  This will prevent the need for port-forwarding later on.  To create a new cluster run:
+
+```sh
+kind create cluster --name gitops-linkerd --config kind/kind-config.yaml
+```
+
 ## Cluster bootstrap
 
 With the `flux bootstrap` command you can install Flux on a Kubernetes cluster and configure
@@ -94,8 +104,8 @@ When Flux has access to your repository it will do the following:
 * installs the Kubernetes NGINX ingress in the `ingress-nginx` namespace
 * installs Flagger and configures its load testing service inside the `flagger-system` namespace
 * waits for NGINX and Flagger to be ready
-* creates the frontend deployment and configures it for A/B testing
-* creates the backend deployment and configures it for progressive traffic shifting
+* creates the faces deployments and configures it for progressive traffic shifting
+* creates the faces-gui deployment and configures it for A/B testing
 
 ![flux-ui](docs/screens/wego-deps.png)
 
@@ -112,34 +122,28 @@ For the ingress controller to forward traffic to the apps, NGINX must be injecte
 
 ## Access the dashboards
 
-To access the Flux dashboard, start port forwarding with:
+All of the dashboards have been exposed ingresses and are accessable via various `sslip.io` urls.  You will need external-ip address for the `ingress-nginx-controller` service.  To find this run:
 
 ```sh
-kubectl -n flux-system port-forward svc/weave-gitops 9001:9001 &
+kubectl -n ingress-nginx get svc ingress-nginx-controller
 ```
 
-Navigate to `http://localhost:9001` and login using the username `admin` and the password `flux`.
+If you are using the kind and create the cluster using the kind-config.yaml file provided, you can use the local `127.0.0.1` ip.
+
+If no external-ip is listed and you are not using the provided kind-config, you will need to start port forwarding and you will use the local `127.0.0.1` ip:
+```sh
+kubectl -n ingress-nginx port-forward svc/ingress-nginx-controller 8080:80 &
+```
+> NOTE: You will need add the `8080` port to all dashboard urls
+
+
+To access the Flux dashboard navigate to `http://<replace ip dots with dashes>.wego.sslip.io` (ie http://127-0-0-1.wego.sslip.io)
+The username is `admin` and the password is `flux`
 
 ![flux-ui](docs/screens/wego-linkerd.png)
 
-To access the Linkerd dashboard, start port forwarding with:
-
-```sh
-kubectl -n linkerd-viz port-forward svc/web 8084:8084 &
-```
-
-Navigate to `http://localhost:8084` to access the dashboard.
+To access the Linkerd dashboard navigate to `http://<replace ip dots with dashes>.linkerd.sslip.io` (ie http://127-0-0-1.linkerd.sslip.io)
 
 ![linkerd-ui](docs/screens/linkerd-metrics.png)
 
-```sh
-kubectl -n flagger-system exec -it deploy/flagger-loadtester -c loadtester -- sh
-```
-
-```sh
-hey -z 2m -q 10 -c 2 http://podinfo-canary.backend/status/500
-```
-
-```sh
-hey -z 2m -q 10 -c 2 -H 'x-user: insider' -host podinfo.sslip.io http://ingress-nginx-controller.ingress-nginx/status/500
-```
+To access the faces applicaiont navigate to `http://<replace ip dots with dashes>.faces.sslip.io` (ie http://127-0-0-1.faces.sslip.io)
