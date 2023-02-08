@@ -26,11 +26,6 @@ spec:
   sourceRef:
     kind: GitRepository
     name: faces
-  images:
-    - name: dwflynn/faces-gui
-      newTag: 0.5.0
-    - name: dwflynn/faces-service
-      newTag: 0.5.0
   patches:
     - patch: |
         - op: replace
