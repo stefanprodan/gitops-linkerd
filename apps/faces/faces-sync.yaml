@@ -41,7 +41,7 @@ spec:
           path: /spec/template/spec/containers/0/env
           value:
             - name: ERROR_FRACTION
-              value: "75"
+              value: "0"
             - name: COLOR_foo
               value: lightgray
       target:
