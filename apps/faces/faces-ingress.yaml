@@ -4,6 +4,8 @@ metadata:
   name: faces-gui
   labels:
     app: faces-gui
+  annotations:
+    nginx.ingress.kubernetes.io/service-upstream: "true"
 spec:
   ingressClassName: nginx
   rules:
