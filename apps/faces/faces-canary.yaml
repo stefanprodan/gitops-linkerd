@@ -8,6 +8,10 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: face
+  autoscalerRef:
+    apiVersion: autoscaling/v2
+    kind: HorizontalPodAutoscaler
+    name: face
   progressDeadlineSeconds: 60
   service:
     port: 80
@@ -38,6 +42,10 @@ spec:
   targetRef:
     apiVersion: apps/v1
     kind: Deployment
+    name: color
+  autoscalerRef:
+    apiVersion: autoscaling/v2
+    kind: HorizontalPodAutoscaler
     name: color
   progressDeadlineSeconds: 60
   service:
@@ -70,6 +78,10 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: smiley
+  autoscalerRef:
+    apiVersion: autoscaling/v2
+    kind: HorizontalPodAutoscaler
+    name: smiley
   progressDeadlineSeconds: 60
   service:
     port: 80
@@ -90,54 +102,3 @@ spec:
         url: http://flagger-loadtester.flagger-system/
         metadata:
           cmd: "hey -z 2m -q 10 -c 2 http://smiley-canary.faces/"
-# ---
-# apiVersion: flagger.app/v1beta1
-# kind: Canary
-# metadata:
-#   name: faces-gui
-# spec:
-#   provider: nginx
-#   targetRef:
-#     apiVersion: apps/v1
-#     kind: Deployment
-#     name: faces-gui
-#   ingressRef:
-#     apiVersion: networking.k8s.io/v1
-#     kind: Ingress
-#     name: faces-gui
-#   progressDeadlineSeconds: 60
-#   service:
-#     port: 80
-#     targetPort: http
-#   analysis:
-#     interval: 10s
-#     threshold: 3
-#     # A/B test interactions
-#     iterations: 10
-#     # A/B test routing
-#     match:
-#       - headers:
-#           x-user:
-#             exact: "insider"
-#     # Linkerd Prometheus checks
-#     metrics:
-#       - name: request-success-rate
-#         thresholdRange:
-#           min: 99
-#         interval: 1m
-#       - name: request-duration
-#         thresholdRange:
-#           max: 500
-#         interval: 30s
-#     # testing (optional)
-#     # webhooks:
-#     #   - name: load-test
-#     #     type: rollout
-#     #     url: http://flagger-loadtester.flagger-system/
-#     #     metadata:
-#     #       cmd: "hey -z 2m -q 10 -c 2 -H 'x-user: insider' -host faces-gui.faces.sslip.io http://ingress-nginx-controller.ingress-nginx"
-#     #   - name: load-test-primary
-#     #     type: rollout
-#     #     url: http://flagger-loadtester.flagger-system/
-#     #     metadata:
-#     #       cmd: "hey -z 2m -q 10 -c 2 -H 'x-user: production' -host faces-gui.faces.sslip.io http://ingress-nginx-controller.ingress-nginx"
