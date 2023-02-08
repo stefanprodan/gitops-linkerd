@@ -37,7 +37,7 @@ spec:
           path: /spec/template/spec/containers/0/env/1
           value:
             name: ERROR_FRACTION
-            value: "0"
+            value: "75"
       target:
         kind: Deployment
-        name: "(face|smiley|color)"
+        name: (face|smiley|color)
