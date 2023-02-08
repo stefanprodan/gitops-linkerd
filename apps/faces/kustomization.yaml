@@ -5,4 +5,4 @@ resources:
   - namespace.yaml
   - faces-sync.yaml
   - faces-ingress.yaml
-  - faces-canary.yaml
+  # - faces-canary.yaml

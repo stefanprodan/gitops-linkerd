@@ -4,58 +4,35 @@ metadata:
   name: face
 spec:
   provider: linkerd
-  # deployment reference
   targetRef:
     apiVersion: apps/v1
     kind: Deployment
     name: face
-  # the maximum time in seconds for the canary deployment
-  # to make progress before it is rollback (default 600s)
   progressDeadlineSeconds: 60
   service:
-    # ClusterIP port number
     port: 80
-    # container port number or name (optional)
     targetPort: http
   analysis:
-    # schedule interval (default 60s)
     interval: 10s
-    # max number of failed metric checks before rollback
     threshold: 3
-    # max traffic percentage routed to canary
-    # percentage (0-100)
     maxWeight: 50
-    # canary increment step
-    # percentage (0-100)
     stepWeight: 5
-    # Linkerd Prometheus checks
     metrics:
       - name: request-success-rate
-        # minimum req success rate (non 5xx responses)
-        # percentage (0-100)
         thresholdRange:
           min: 99
         interval: 1m
       - name: request-duration
-        # maximum req duration P99
-        # milliseconds
         thresholdRange:
           max: 500
         interval: 30s
     # testing (optional)
-    webhooks:
-      # - name: acceptance-test
-      #   type: pre-rollout
-      #   url: http://flagger-loadtester.flagger-system/
-      #   timeout: 30s
-      #   metadata:
-      #     type: bash
-      #     cmd: "curl -sd 'test' http://podinfo-canary.backend/token | grep token"
-      - name: load-test
-        type: rollout
-        url: http://flagger-loadtester.flagger-system/
-        metadata:
-          cmd: "hey -z 2m -q 10 -c 2 http://face-canary.faces/"
+    # webhooks:
+    #   - name: load-test
+    #     type: rollout
+    #     url: http://flagger-loadtester.flagger-system/
+    #     metadata:
+    #       cmd: "hey -z 2m -q 10 -c 2 http://face-canary.faces/"
 ---
 apiVersion: flagger.app/v1beta1
 kind: Canary
@@ -63,58 +40,35 @@ metadata:
   name: color
 spec:
   provider: linkerd
-  # deployment reference
   targetRef:
     apiVersion: apps/v1
     kind: Deployment
     name: color
-  # the maximum time in seconds for the canary deployment
-  # to make progress before it is rollback (default 600s)
   progressDeadlineSeconds: 60
   service:
-    # ClusterIP port number
     port: 80
-    # container port number or name (optional)
     targetPort: http
   analysis:
-    # schedule interval (default 60s)
     interval: 10s
-    # max number of failed metric checks before rollback
     threshold: 3
-    # max traffic percentage routed to canary
-    # percentage (0-100)
     maxWeight: 50
-    # canary increment step
-    # percentage (0-100)
     stepWeight: 5
-    # Linkerd Prometheus checks
     metrics:
       - name: request-success-rate
-        # minimum req success rate (non 5xx responses)
-        # percentage (0-100)
         thresholdRange:
           min: 99
         interval: 1m
       - name: request-duration
-        # maximum req duration P99
-        # milliseconds
         thresholdRange:
           max: 500
         interval: 30s
     # testing (optional)
-    webhooks:
-      # - name: acceptance-test
-      #   type: pre-rollout
-      #   url: http://flagger-loadtester.flagger-system/
-      #   timeout: 30s
-      #   metadata:
-      #     type: bash
-      #     cmd: "curl -sd 'test' http://podinfo-canary.backend/token | grep token"
-      - name: load-test
-        type: rollout
-        url: http://flagger-loadtester.flagger-system/
-        metadata:
-          cmd: "hey -z 2m -q 10 -c 2 http://color-canary.faces/"
+    # webhooks:
+    #   - name: load-test
+    #     type: rollout
+    #     url: http://flagger-loadtester.flagger-system/
+    #     metadata:
+    #       cmd: "hey -z 2m -q 10 -c 2 http://color-canary.faces/"
 ---
 apiVersion: flagger.app/v1beta1
 kind: Canary
@@ -122,58 +76,35 @@ metadata:
   name: smiley
 spec:
   provider: linkerd
-  # deployment reference
   targetRef:
     apiVersion: apps/v1
     kind: Deployment
     name: smiley
-  # the maximum time in seconds for the canary deployment
-  # to make progress before it is rollback (default 600s)
   progressDeadlineSeconds: 60
   service:
-    # ClusterIP port number
     port: 80
-    # container port number or name (optional)
     targetPort: http
   analysis:
-    # schedule interval (default 60s)
     interval: 10s
-    # max number of failed metric checks before rollback
     threshold: 3
-    # max traffic percentage routed to canary
-    # percentage (0-100)
     maxWeight: 50
-    # canary increment step
-    # percentage (0-100)
     stepWeight: 5
-    # Linkerd Prometheus checks
     metrics:
       - name: request-success-rate
-        # minimum req success rate (non 5xx responses)
-        # percentage (0-100)
         thresholdRange:
           min: 99
         interval: 1m
       - name: request-duration
-        # maximum req duration P99
-        # milliseconds
         thresholdRange:
           max: 500
         interval: 30s
     # testing (optional)
-    webhooks:
-      # - name: acceptance-test
-      #   type: pre-rollout
-      #   url: http://flagger-loadtester.flagger-system/
-      #   timeout: 30s
-      #   metadata:
-      #     type: bash
-      #     cmd: "curl -sd 'test' http://podinfo-canary.backend/token | grep token"
-      - name: load-test
-        type: rollout
-        url: http://flagger-loadtester.flagger-system/
-        metadata:
-          cmd: "hey -z 2m -q 10 -c 2 http://smiley-canary.faces/"
+    # webhooks:
+    #   - name: load-test
+    #     type: rollout
+    #     url: http://flagger-loadtester.flagger-system/
+    #     metadata:
+    #       cmd: "hey -z 2m -q 10 -c 2 http://smiley-canary.faces/"
 ---
 apiVersion: flagger.app/v1beta1
 kind: Canary
@@ -181,28 +112,20 @@ metadata:
   name: faces-gui
 spec:
   provider: nginx
-  # deployment reference
   targetRef:
     apiVersion: apps/v1
     kind: Deployment
     name: faces-gui
-  # Ingress reference
   ingressRef:
     apiVersion: networking.k8s.io/v1
     kind: Ingress
     name: faces-gui
-  # the maximum time in seconds for the canary deployment
-  # to make progress before it is rollback (default 600s)
   progressDeadlineSeconds: 60
   service:
-    # ClusterIP port number
     port: 80
-    # container port number or name (optional)
-    targetPort: 9898
+    targetPort: http
   analysis:
-    # schedule interval (default 60s)
     interval: 10s
-    # max number of failed metric checks before rollback
     threshold: 3
     # A/B test interactions
     iterations: 10
@@ -214,27 +137,22 @@ spec:
     # Linkerd Prometheus checks
     metrics:
       - name: request-success-rate
-        # minimum req success rate (non 5xx responses)
-        # percentage (0-100)
         thresholdRange:
           min: 99
         interval: 1m
       - name: request-duration
-        # maximum req duration P99
-        # milliseconds
         thresholdRange:
           max: 500
         interval: 30s
     # testing (optional)
-    webhooks:
-      - name: load-test
-        type: rollout
-        url: http://flagger-loadtester.flagger-system/
-        metadata:
-          cmd: "hey -z 2m -q 10 -c 2 -H 'x-user: insider' -host face.faces.sslip.io http://ingress-nginx-controller.ingress-nginx"
-      - name: load-test-primary
-        type: rollout
-        url: http://flagger-loadtester.flagger-system/
-        metadata:
-          cmd: "hey -z 2m -q 10 -c 2 -H 'x-user: production' -host face.faces.sslip.io http://ingress-nginx-controller.ingress-nginx"
-
+    # webhooks:
+    #   - name: load-test
+    #     type: rollout
+    #     url: http://flagger-loadtester.flagger-system/
+    #     metadata:
+    #       cmd: "hey -z 2m -q 10 -c 2 -H 'x-user: insider' -host faces-gui.faces.sslip.io http://ingress-nginx-controller.ingress-nginx"
+    #   - name: load-test-primary
+    #     type: rollout
+    #     url: http://flagger-loadtester.flagger-system/
+    #     metadata:
+    #       cmd: "hey -z 2m -q 10 -c 2 -H 'x-user: production' -host faces-gui.faces.sslip.io http://ingress-nginx-controller.ingress-nginx"
