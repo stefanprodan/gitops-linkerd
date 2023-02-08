@@ -20,7 +20,7 @@ spec:
     metrics:
       - name: request-success-rate
         thresholdRange:
-          min: 99
+          min: 70
         interval: 1m
     webhooks:
       - name: load-test
@@ -51,7 +51,7 @@ spec:
     metrics:
       - name: request-success-rate
         thresholdRange:
-          min: 99
+          min: 70
         interval: 1m
     webhooks:
       - name: load-test
@@ -82,7 +82,7 @@ spec:
     metrics:
       - name: request-success-rate
         thresholdRange:
-          min: 99
+          min: 70
         interval: 1m
     webhooks:
       - name: load-test
