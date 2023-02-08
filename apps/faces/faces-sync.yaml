@@ -41,9 +41,9 @@ spec:
           path: /spec/template/spec/containers/0/env
           value:
             - name: ERROR_FRACTION
-              value: "0"
+              value: "75"
             - name: COLOR_foo
-              value: blue
+              value: lightgray
       target:
         kind: Deployment
         name: faces-gui
