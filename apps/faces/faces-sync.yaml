@@ -35,4 +35,22 @@ spec:
             value: "0"
       target:
         kind: Deployment
-        name: (face|smiley|color)
+        name: face
+    - patch: |
+        - op: replace
+          path: /spec/template/spec/containers/0/env/1
+          value:
+            name: ERROR_FRACTION
+            value: "0"
+      target:
+        kind: Deployment
+        name: smiley
+    - patch: |
+        - op: replace
+          path: /spec/template/spec/containers/0/env/1
+          value:
+            name: ERROR_FRACTION
+            value: "20"
+      target:
+        kind: Deployment
+        name: color
