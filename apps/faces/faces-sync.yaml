@@ -23,6 +23,7 @@ spec:
   interval: 10m
   path: "./k8s/"
   prune: true
+  wait: true
   sourceRef:
     kind: GitRepository
     name: faces
