@@ -131,6 +131,7 @@ kubectl -n ingress-nginx get svc ingress-nginx-controller
 If you are using the kind and create the cluster using the kind-config.yaml file provided, you can use the local `127.0.0.1` ip.
 
 If no external-ip is listed and you are not using the provided kind-config, you will need to start port forwarding and you will use the local `127.0.0.1` ip:
+
 ```sh
 kubectl -n ingress-nginx port-forward svc/ingress-nginx-controller 8080:80 &
 ```
