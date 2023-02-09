@@ -72,11 +72,11 @@ brew bundle
 
 The complete list of tools can be found in the `Brewfile`.
 
-## Create Kind cluster
+## Create Kind cluster (optional)
 
 Everything in this demo can be ran locally in a [Kind](https://kind.sigs.k8s.io/) cluster and a configuration file is included will automatically expose the nginx controller to the localhost.  This will prevent the need for port-forwarding later on.  To create a new cluster run:
 
-```sh
+```shell
 kind create cluster --name gitops-linkerd --config kind/kind-config.yaml
 ```
 
@@ -134,16 +134,20 @@ If no external-ip is listed and you are not using the provided kind-config, you 
 ```sh
 kubectl -n ingress-nginx port-forward svc/ingress-nginx-controller 8080:80 &
 ```
-> NOTE: You will need add the `8080` port to all dashboard urls
+> NOTE: You will need add the `8080` or the specified forwarding port to all dashboard urls
 
+### Dashboard links
 
-To access the Flux dashboard navigate to `http://<replace ip dots with dashes>.wego.sslip.io` (ie http://127-0-0-1.wego.sslip.io)
-The username is `admin` and the password is `flux`
+| Dashboard | Url | Credentials |
+| --------- | --- | ----------- |
+| Weave GitOps (Flux) | http://127-0-0-1.wego.sslip.io | username: `admin` password `flux` |
+| Linkerd | http://127-0-0-1.linkerd.sslip.io | n/a |
+| Faces | http://127-0-0-1.faces.sslip.io | n/a |
 
+> replace `127-0-0-1` with the ip address of the ingress controller if necessary.  Also replace the `.` with `-` (ie change `127.0.0.1` to `127-0-0-1`)
+
+Sample Flux ui
 ![flux-ui](docs/screens/wego-linkerd.png)
 
-To access the Linkerd dashboard navigate to `http://<replace ip dots with dashes>.linkerd.sslip.io` (ie http://127-0-0-1.linkerd.sslip.io)
-
+Sample Linkerd ui
 ![linkerd-ui](docs/screens/linkerd-metrics.png)
-
-To access the faces applicaiont navigate to `http://<replace ip dots with dashes>.faces.sslip.io` (ie http://127-0-0-1.faces.sslip.io)

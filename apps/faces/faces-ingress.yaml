@@ -5,7 +5,7 @@ metadata:
   labels:
     app: faces-gui
   annotations:
-    nginx.ingress.kubernetes.io/service-upstream: "true" # IMPORTANT!!! -> A/B Canary will not work without it
+    nginx.ingress.kubernetes.io/service-upstream: "true" # IMPORTANT!!! -> Required for AB testing using NGINX with Linkerd
 spec:
   ingressClassName: nginx
   rules:
