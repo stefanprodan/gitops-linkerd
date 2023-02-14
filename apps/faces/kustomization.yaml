@@ -7,39 +7,47 @@ resources:
   - faces-ingress.yaml
   - faces-canary.yaml
   - faces-abtest.yaml
-patches:
-  - patch: |
-      - op: add
-        path: /spec/template/spec/containers/0/env
-        value:
-          - name: FACES_SERVICE
-            value: "smiley"
-          - name: ERROR_FRACTION
-            value: "20"
-          - name: DELAY_BUCKETS
-            value: "0,5,10,15,20,50,200,500,1500"
-          - name: SMILEY
-            value: "HeartEyes"
-    target:
-      kind: Deployment
-      name: smiley
-  - patch: |
-      - op: replace
-        path: /spec/template/spec/containers/0/env/1
-        value:
-          name: ERROR_FRACTION
-          value: "0"
-    target:
-      kind: Deployment
-      name: (face|color)
-  - patch: |
-      - op: add
-        path: /spec/template/spec/containers/0/env
-        value:
-          - name: ERROR_FRACTION
-            value: "0"
-          - name: COLOR_foo
-            value: lightgray
-    target:
-      kind: Deployment
-      name: faces-gui
+# patches:
+#   - patch: |
+#       - op: add
+#         path: /spec/template/spec/containers/0/env
+#         value:
+#           - name: FACES_SERVICE
+#             value: "smiley"
+#           - name: ERROR_FRACTION
+#             value: "20"
+#           - name: DELAY_BUCKETS
+#             value: "0,5,10,15,20,50,200,500,1500"
+#           - name: SMILEY
+#             value: "HeartEyes"
+#     target:
+#       kind: Deployment
+#       name: smiley
+#   - patch: |
+#       - op: replace
+#         path: /spec/template/spec/containers/0/env/1
+#         value:
+#           name: ERROR_FRACTION
+#           value: "0"
+#     target:
+#       kind: Deployment
+#       name: (face|color)
+#   - patch: |
+#       - op: add
+#         path: /spec/template/spec/containers/0/env
+#         value:
+#           - name: ERROR_FRACTION
+#             value: "0"
+#           - name: COLOR_foo
+#             value: lightgray
+#     target:
+#       kind: Deployment
+#       name: faces-gui
+#   - patch: |
+#       - op: add
+#         path: /spec/template/spec/containers/0/resources/limits
+#         value:
+#           cpu: 100m
+#           memory: 128Mi
+#     target:
+#       kind: Deployment
