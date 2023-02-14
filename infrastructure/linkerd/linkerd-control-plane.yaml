@@ -24,6 +24,12 @@ spec:
       valuesKey: tls.crt
       targetPath: identityTrustAnchorsPEM
   values:
+    proxy:
+      resouces:
+        cpu:
+          limit: 100m
+        memory:
+          limit: 128Mi
     identity:
       issuer:
         scheme: "kubernetes.io/tls"
