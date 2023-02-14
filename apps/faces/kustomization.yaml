@@ -7,7 +7,6 @@ resources:
   - faces-ingress.yaml
   - faces-canary.yaml
   - faces-abtest.yaml
-  - faces.yaml
 patches:
   - patch: |
       - op: add
