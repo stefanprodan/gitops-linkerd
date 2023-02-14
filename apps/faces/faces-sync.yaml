@@ -49,10 +49,10 @@ spec:
         kind: Deployment
         name: faces-gui
     - patch: |
-      - op: add
-        path: /spec/template/spec/containers/0/resources/limits
-        value:
-          cpu: 100m
-          memory: 128Mi
-    target:
-      kind: Deployment
+        - op: add
+          path: /spec/template/spec/containers/0/resources/limits
+          value:
+            cpu: 100m
+            memory: 128Mi
+      target:
+        kind: Deployment
