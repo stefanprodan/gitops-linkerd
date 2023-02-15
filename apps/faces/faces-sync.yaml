@@ -35,11 +35,11 @@ spec:
             - name: FACES_SERVICE
               value: "smiley"
             - name: ERROR_FRACTION
-              value: "20"
+              value: "0"
             - name: DELAY_BUCKETS
               value: "0,5,10,15,20,50,200,500,1500"
-            - name: SMILEY
-              value: "HeartEyes"
+            # - name: SMILEY
+            #   value: "HeartEyes"
       target:
         kind: Deployment
         name: smiley
