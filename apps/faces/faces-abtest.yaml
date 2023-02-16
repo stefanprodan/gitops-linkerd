@@ -23,8 +23,8 @@ spec:
     # A/B test routing
     match:
       - headers:
-          x-canary:
-            exact: "insider"
+          x-faces-user:
+            exact: "testuser"
     metrics:
       - name: request-success-rate
         thresholdRange:
@@ -35,9 +35,9 @@ spec:
         type: rollout
         url: http://flagger-loadtester.flagger-system/
         metadata:
-          cmd: "hey -z 2m -q 10 -c 2 -H 'x-canary: insider' -host faces-gui.faces.sslip.io http://ingress-nginx-controller.ingress-nginx"
+          cmd: "hey -z 2m -q 10 -c 2 -H 'x-faces-user: testuser' -host faces-gui.faces.sslip.io http://ingress-nginx-controller.ingress-nginx"
       - name: load-test-primary
         type: rollout
         url: http://flagger-loadtester.flagger-system/
         metadata:
-          cmd: "hey -z 2m -q 10 -c 2 -H 'x-canary: production' -host faces-gui.faces.sslip.io http://ingress-nginx-controller.ingress-nginx"
+          cmd: "hey -z 2m -q 10 -c 2 -H 'x-faces-user: normaluser' -host faces-gui.faces.sslip.io http://ingress-nginx-controller.ingress-nginx"
