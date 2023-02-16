@@ -9,6 +9,14 @@ and [Weave GitOps](https://github.com/weaveworks/weave-gitops).
 
 ![flux-ui](docs/screens/wego-apps.png)
 
+## THE DEMO
+
+See [DEMO.md] for the demo as presented during the "Real-World GitOps" Service
+Mesh Academy. You'll need a running (empty) cluster that can support
+`LoadBalancer` services, and you'll need `yq`, `bat`, `kubectl`, and `flux`.
+The easiest way to get the commands is to run `brew bundle`; the easiest way
+to run the demo is with [demosh](https://github.com/BuoyantIO/demosh).
+
 ## Introduction
 
 ### What is GitOps?
