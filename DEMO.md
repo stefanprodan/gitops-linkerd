@@ -43,7 +43,7 @@ BAT_STYLE="grid,numbers"
 ```
 
 ---
-<!-- @SKIP -->
+<!-- @SHOW -->
 
 # Real-World GitOps: Flux, Flagger, and Linkerd
 
@@ -578,8 +578,6 @@ Kustomization. That won't work this time: when manually triggering
 reconciliation, Flux just looks at the one Kustomization you tell it to,
 rather than recursing into Kustomizations it creates. So, this time, we tell
 it to look in the `faces` namespace for the `faces` Kustomization:
-
-<!-- @SHOW -->
 
 ```bash
 flux reconcile ks faces -n faces --with-source
