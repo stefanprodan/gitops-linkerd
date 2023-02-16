@@ -63,16 +63,29 @@ flux bootstrap github \
   --personal
 ```
 
-Watch Flux installing Linkerd first, then the demo apps:
+At this point Flux will install its own in-cluster services, then continue
+with all the other components we've defined (Weave GitOps, Linkerd, Flagger,
+etc.). We can see what it's doing by looking at its Kustomization resources:
 
 ```bash
 flux get kustomizations
 ```
 
-Obviously stuff can take awhile, so you can use `--watch` too:
+Bootstrapping everything can take a little while, of course, so there's a
+`--watch` switch that can be nice. We'll use that to keep an eye on what's
+going on, and make sure that everything is proceeding correctly:
 
 ```bash
 flux get kustomizations --watch
+```
+
+One thing to be aware of here: note that that last line says "Applied", not
+"applied and everything is ready". Let's also wait until our application is
+completely running:
+
+```bash
+kubectl rollout status -n faces deployments
+watch kubectl get pods -n faces
 ```
 
 <!-- @clear -->
@@ -190,30 +203,75 @@ that they're just ordinary YAML. We're not using `kustomize`'s ability to
 patch things here; we're just using it to sequence applying some YAML -- and
 some of the YAML is for Flux resources rather than Kubernetes resources.
 
-Here are `namespace.yaml` and `repository.yaml`:
+`namespace.yaml` creates the `cert-manager` namespace:
 
 ```bash
-bat ./infrastructure/cert-manager/{namespace,repository}.yaml
+#@echo
+#@notypeout
+#@nowaitbefore
+#@waitafter
+bat ./infrastructure/cert-manager/namespace.yaml
 ```
 
-...and here's `release.yaml`. One important note here is that Flux's default
-`selectorLabels` does not include `service`. We've added that here so that we
-can do Canary and A/B test definitions that select Deployments based on
-`service`.
+`repository.yaml` tells Flux where to find the Helm chart for `cert-manager`:
 
 ```bash
+#@echo
+#@notypeout
+#@nowaitbefore
+#@waitafter
+bat ./infrastructure/cert-manager/repository.yaml
+```
+
+Finally, `release.yaml` tells Flux how to use the Helm chart to install
+`cert-manager`:
+
+```bash
+#@echo
+#@notypeout
+#@nowaitbefore
+#@waitafter
 bat ./infrastructure/cert-manager/release.yaml
 ```
 
-<!-- @clear -->
+Again, we're not actually using `kustomize` to patch anything here: all we're
+doing is telling it to create some resources for us.
+
+<!-- @wait_clear -->
+
+We won't look at all the other components in `infrastructure`, but there's one
+important thing buried in `infrastructure/flagger`. Here's what that looks like:
+
+```bash
+#@echo
+#@notypeout
+#@nowaitbefore
+#@waitafter
+ls -l ./infrastructure/flagger
+```
+
+This is basically the same pattern as we saw for `cert-manager`, and most of
+it is basically just setting up a standard Helm install of Flagger, following
+the docs at https://docs.flagger.app.
+
+However, Flagger requires us to define the set of _selector labels_ that it
+will pay attention to when it watches for rollouts, and by default, that set
+does not include `service`. We want to be able to use `service` when managing
+rollouts, so we've added it in `infrastructure/flagger/release.yaml`:
+
+```bash
+bat ./infrastructure/flagger/release.yaml
+```
+
+<!-- @wait_clear -->
 
 So that's a quick look at some of the definitions for the infrastructure of
 this cluster -- basically, all the things our application needs to work. Now
 let's continue with a look at `apps.yaml`, which is the definition of the
 Faces application itself. There's just a single YAML document in this file: it
 defines a Kustomization named `apps`, still in `flux-system` namespace, that
-depends on both `flagger` and `ingress-nginx`, an has `kustomize` files in the
-`apps` directory:
+depends on both `flagger` and `ingress-nginx`, and has `kustomize` files in
+the `apps` directory:
 
 ```bash
 #@echo
@@ -267,7 +325,8 @@ reconciliation.
 Let's take a look at those files one at a time.
 
 First, we have `namespace.yaml`. This one is straightforward: it defines the
-`faces` namespace that we'll use for everything here.
+`faces` namespace that we'll use for everything here, and it tells Linkerd to
+inject any Pods appearing in this namespace.
 
 ```bash
 #@echo
@@ -407,7 +466,7 @@ instructive than starting with a successful rollout, because you'll get to see
 how Flagger responds when things go wrong.
 
 To get the ball rolling, edit `faces-sync.yaml` to set the `ERROR_FRACTION` to
-75% for all the backend Faces services. (This is on line 36 -- don't mess with
+75% for all the backend Faces services. (This is on line 35 -- don't mess with
 the `ERROR_FRACTION` for the `faces-gui`.)
 
 ```bash

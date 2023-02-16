@@ -4,7 +4,7 @@ set -e
 # required here.
 missing= ;\
 \
-for cmd in bat kubectl kubectx linkerd flux; do \
+for cmd in bat yq kubectl kubectx linkerd flux; do \
     if ! command -v $cmd >/dev/null 2>&1; then \
         missing="$missing $cmd" ;\
     fi ;\
