@@ -20,3 +20,5 @@ spec:
   values:
     meshProvider: linkerd
     metricsServer: http://prometheus.linkerd-viz:9090
+    linkerdAuthPolicy:
+      create: true
