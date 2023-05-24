@@ -20,6 +20,10 @@ This workshop requires some fairly specific setup.
   need to set GITHUB_USER to your GitHub username, and GITHUB_TOKEN to a
   personal access token under your account with `repo` scope.
 
+  (Note that this token must be an old-style personal access token, not a new
+  fine-grained access token. To create a token, go to your GitHub settings >
+  `Developer settings` > `Personal access tokens`.)
+
 - Third, you need to clone your two forked repos side-by-side in the directory
   tree, so that "gitops-linkerd" and "faces-demo" are siblings. Both of these
   clones need to be in their `main` branch.
