@@ -21,3 +21,5 @@ spec:
     meshProvider: linkerd
     metricsServer: http://prometheus.linkerd-viz:9090
     selectorLabels: app,name,app.kubernetes.io/name,service
+    linkerdAuthPolicy:
+      create: true
